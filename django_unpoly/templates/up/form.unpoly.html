@@ -1,0 +1,13 @@
+{% extends "base/card.html" %}
+{% load crispy_forms_tags %}
+
+{% block card_body %}
+    <form id='form' method="post"{% if target %} up-target="{{ target }}" up-fail-target=".card" up-fail-layer="modal" up-fallback="#main"{% endif %}{% if autosubmit %} up-autosubmit {% endif %}class="form-horizontal" autocomplete="off">
+        {% csrf_token %}
+        {{ form|crispy }}
+    </form>
+{% endblock card_body %}
+
+{% block card_footer %}
+    <button type="submit" form="form" class="ne-primary-action btn btn-primary no-print">Absenden</button>
+{% endblock card_footer %}

@@ -1,0 +1,2 @@
+class UpException(Exception):
+    pass
