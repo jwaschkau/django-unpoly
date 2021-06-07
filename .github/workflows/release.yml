@@ -40,6 +40,7 @@ jobs:
           unreleased: true
           addSections: '{"documentation":{"prefix":"**Documentation:**","labels":["documentation"]}}'
           output: CHANGELOG.md
+          sinceTag: v0.1.0
 
       - uses: actions/setup-python@v2
         with:

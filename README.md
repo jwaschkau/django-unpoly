@@ -26,7 +26,7 @@ Unpoly integration and utilities for Django
 
 
 * Free software: MIT
-* Documentation: <https://django-unpoly.readthedocs.io>
+* Documentation: <https://jwaschkau.github.io/django-unpoly/>
 
 
 ## Features
