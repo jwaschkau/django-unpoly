@@ -18,7 +18,7 @@ class UnpolyMiddleware:
         response["X-Up-Location"] = request.get_full_path()
 
         # Signaling the initial request method
-        if request.method == "GET" and "X-Up-Target header" not in request:
+        if request.method == "GET" and "X-Up-Target" not in request:
             response.set_cookie("_up_method", request.method)
         else:
             response.delete_cookie("_up_method")
