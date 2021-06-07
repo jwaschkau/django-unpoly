@@ -48,9 +48,9 @@ plugins:
   - include-markdown
   - search:
       lang: en
-  - mkdocstrings:
-      watch:
-        - django_unpoly
+#  - mkdocstrings:
+#      watch:
+#        - django_unpoly
 extra:
   social:
     - icon: fontawesome/brands/github
