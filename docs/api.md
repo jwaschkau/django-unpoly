@@ -1,1 +1,1 @@
-::: django-unpoly
+::: django_unpoly

@@ -53,14 +53,6 @@ plugins:
         - django_unpoly
 extra:
   social:
-    - icon: fontawesome/brands/twitter
-      # replace with your own tweet link below
-      link: http://www.jieyu.ai
-      name: Tweet
-    - icon: fontawesome/brands/facebook
-      # replace with your own facebook link below
-      link: http://www.jieyu.ai
-      name: Facebook
     - icon: fontawesome/brands/github
       link: https://github.com/jwaschkau/django-unpoly
       name: Github

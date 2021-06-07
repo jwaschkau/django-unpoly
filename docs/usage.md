@@ -5,7 +5,7 @@ To use django-unpoly in a project
 ```python
 MIDDLEWARE = [
 ...
-'django_unpoly.middleware.UnpolyMiddleware',
+'django_unpoly.middleware.UpMiddleware',
 ...
 ]
 ```
@@ -15,10 +15,10 @@ MIDDLEWARE = [
 The target is determined automatically if the model uses the `UnpolyModelIdMixin`.
 
 ```python
-from django_unpoly.up import UnpolyModelViewMixin
+from django_unpoly.up import UpViewMixin
 from django.views.generic import UpdateView
 
-class MyUnpolyModelView(UnpolyModelViewMixin, UpdateView):
+class MyUnpolyModelView(UpModelViewMixin, UpdateView):
     autosubmit = True
     form_class = MyFormClass
     template_name = 'django_unpoly/form.unpoly.html'
@@ -46,10 +46,10 @@ version={model.version}
 ```
 
 ```python
-from django_unpoly.up import UnpolyModelViewMixin, DjangoConcurrencyMixin
+from django_unpoly.up import UpModelViewMixin, UpDjangoConcurrencyMixin
 from django.views.generic import UpdateView
 
-class MyUnpolyModelView(DjangoConcurrencyMixin, UnpolyModelViewMixin, UpdateView):
+class MyUnpolyModelView(UpDjangoConcurrencyMixin, UpModelViewMixin, UpdateView):
     autosubmit = True
     form_class = MyFormClass
     template_name = 'django_unpoly/form.unpoly.html'
