@@ -29,7 +29,8 @@ class UpDjangoConcurrencyMixin:
             if self.request.GET.get("version") != str(self.object.version):
                 raise UpException(
                     _("{object} was modified in another window.").format(
-                        object=self.object._meta.verbose_name
+                        object=self.object._meta.verbose_name,
+                        status_code=410
                     )
                 )
         return result
