@@ -1,7 +1,7 @@
 from django.http.response import HttpResponseBase
 
 
-class UnpolyMiddleware:
+class UpMiddleware:
     """
     Implements the unpoly server protocol as described at https://unpoly.com/up.protocol
     """

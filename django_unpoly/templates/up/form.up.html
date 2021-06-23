@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block card_body %}
+    <form id='up_form' method="post"{% if target %} up-target="{{ target }}" up-layer="root" up-fail-layer="any"{% endif %}{% if autosubmit %} up-autosubmit {% endif %}class="form-horizontal" autocomplete="off">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+{% endblock card_body %}
+
+{% block card_footer %}
+    <button type="submit" form="up_form" class="btn btn-primary no-print">Send</button>
+{% endblock card_footer %}

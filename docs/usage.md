@@ -10,9 +10,13 @@ MIDDLEWARE = [
 ]
 ```
 
-## Unpoly forms
+## Unpoly Modal forms
 
-The target is determined automatically if the model uses the `UnpolyModelIdMixin`.
+The target is determined automatically if the model uses the `UpModelIdMixin` and updated
+if the successful form submission returns html containing `up-id`. Form errors will update
+the current open modal dialog.
+
+### Python
 
 ```python
 from django_unpoly.up import UpViewMixin
@@ -21,8 +25,28 @@ from django.views.generic import UpdateView
 class MyUnpolyModelView(UpModelViewMixin, UpdateView):
     autosubmit = True
     form_class = MyFormClass
-    template_name = 'django_unpoly/form.unpoly.html'
+    template_name = 'django_unpoly/form.up.html'
     model = MyModel
+```
+
+### HTML
+
+```html
+<div up-id="{{object.up_id}}">
+    <a up-layer="new" href="{% url 'myformurl' object.id %}">
+        MyModal
+    </a>
+</div>
+```
+
+A redirect may be used to update the target on successful form submissions.
+
+```html
+<div up-id="{{object.up_id}}">
+    <a up-layer="new" href="{% url 'myformurl' object.id %}?redirect="currentpage">
+        MyModal
+    </a>
+</div>
 ```
 
 ## django-debug-toolbar
@@ -39,8 +63,7 @@ version will be checked for changes. The `version` field should also be added to
 concurrent changes to the model.
 
 ```html
-version={model.version}
-<a up-modal="#main" href="{% url 'myurl' model.id %}?version={{ model.version }}">
+<a up-modal="new" href="{% url 'myurl' model.id %}?version={{ model.version }}">
     MyModal
 </a>
 ```

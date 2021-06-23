@@ -5,7 +5,12 @@ from django.utils.translation import gettext as _
 from django_unpoly.exceptions import UpException
 
 
-class UnpolyFormMixin:
+class UpModelIdMixin:
+    def up_id(self):
+        return f'{self.__class__.__name__}_{self.pk}'
+
+
+class UpFormMixin:
     def form_invalid(self, *args, **kwargs):
         # Signaling failed form submissions
         # https://unpoly.com/up.protocol
@@ -14,7 +19,7 @@ class UnpolyFormMixin:
         return response
 
 
-class DjangoConcurrencyMixin:
+class UpDjangoConcurrencyMixin:
     def get(self, request, *args, **kwargs):
         result = super().get(request, *args, **kwargs)
         # If the object uses a version field it has to be checked on first render
@@ -30,12 +35,12 @@ class DjangoConcurrencyMixin:
         return result
 
 
-class UnpolyModelViewMixin(LoginRequiredMixin, UnpolyFormMixin):
+class UpModelViewMixin(LoginRequiredMixin, UpFormMixin):
     autosubmit: bool = False
 
     def get_context_data(self, *args, **kwargs):
         if "target" not in kwargs:
-            kwargs.update({"target": f"*[up-id='{self.object.unpoly_id()}']"})
+            kwargs.update({"target": f"*[up-id='{self.object.up_id()}']"})
         if "autosubmit" not in kwargs:
             kwargs.update({"autosubmit": self.autosubmit})
         return super().get_context_data(*args, **kwargs)
