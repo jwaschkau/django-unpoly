@@ -29,6 +29,15 @@ class MyUnpolyModelView(UpModelViewMixin, UpdateView):
     model = MyModel
 ```
 
+The X-Up-Target-Header can be set manually to change the HTML defined target.
+```python
+class MyUnpolyModelView(UpModelViewMixin, UpdateView):
+    def form_valid(self, form):
+        if xyz:
+            self.up_target = '#main'
+```
+
+
 ### HTML
 
 ```html
