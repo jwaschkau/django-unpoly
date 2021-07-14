@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponseBase
 from django.utils.translation import gettext as _
@@ -10,7 +12,18 @@ class UpModelIdMixin:
         return f'{self.__class__.__name__}_{self.pk}'
 
 
-class UpFormMixin:
+class UpMixin:
+    def __init__(self):
+        self.up_target: Optional[str] = None  # if the up_target is set, it will be sent as X-Up-Target Request-Header
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if self.up_target:
+            response['X-Up-Target'] = str(self.up_target)
+        return response
+
+
+class UpFormMixin(UpMixin):
     def form_invalid(self, *args, **kwargs):
         # Signaling failed form submissions
         # https://unpoly.com/up.protocol
@@ -19,7 +32,7 @@ class UpFormMixin:
         return response
 
 
-class UpDjangoConcurrencyMixin:
+class UpDjangoConcurrencyMixin(UpMixin):
     def get(self, request, *args, **kwargs):
         result = super().get(request, *args, **kwargs)
         # If the object uses a version field it has to be checked on first render
