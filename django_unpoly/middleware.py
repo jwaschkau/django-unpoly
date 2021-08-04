@@ -25,6 +25,9 @@ class UpMiddleware:
         Preserves Unpoly X-Up-Headers over redirects by adding them as GET parameters
         See https://github.com/jwaschkau/django-unpoly/issues/4
         """
+        if not hasattr(response, 'url'):
+            # Some responses do not have a url e.g. HttpResponseNotModified
+            return response
         response['X-Up-Location'] = response.url  # Report the original url to Unpoly
         params = {}
         for header, value in self._get_up_redirect_headers(response):
