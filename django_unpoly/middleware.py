@@ -23,7 +23,7 @@ class UpMiddleware:
         """
         if not hasattr(response, 'url'):
             # Some responses do not have a url e.g. HttpResponseNotModified
-            return
+            return response
         response['X-Up-Location'] = response.url  # Report the original url to Unpoly
         params = {}
         for header, value in self._get_up_headers(response):
