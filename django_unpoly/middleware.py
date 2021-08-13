@@ -6,12 +6,16 @@ class UpMiddleware:
     """
     Implements the Unpoly server protocol as described at https://unpoly.com/up.protocol
     """
+    exclude_redirect_headers = ('X-Up-Method',)
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def _get_up_headers(self, response):
         return [(header, value) for header, value in response.items() if header.startswith('X-Up-')]
+
+    def _get_up_redirect_headers(self, response):
+        return [(x, y) for x, y in self._get_up_headers(response) if x not in self.exclude_redirect_headers]
 
     def _get_up_params(self, request):
         return [(header, value) for header, value in request.GET.items() if header.startswith('X-Up-')]
@@ -21,9 +25,12 @@ class UpMiddleware:
         Preserves Unpoly X-Up-Headers over redirects by adding them as GET parameters
         See https://github.com/jwaschkau/django-unpoly/issues/4
         """
+        if not hasattr(response, 'url'):
+            # Some responses do not have a url e.g. HttpResponseNotModified
+            return response
         response['X-Up-Location'] = response.url  # Report the original url to Unpoly
         params = {}
-        for header, value in self._get_up_headers(response):
+        for header, value in self._get_up_redirect_headers(response):
             params[header] = response[header]
         if params:
             separator = '?' if '?' not in response.url else '&'
@@ -39,6 +46,7 @@ class UpMiddleware:
     def __call__(self, request):
         # Save Unpoly parameters for later use and clean them up
         up_params = self._get_up_params(request)
+        # Remove Up-Parameters sent by GET so they do not show up
         request.GET = self._remove_up_params(request.GET, up_params)
 
         response: HttpResponseBase = self.get_response(request)
@@ -54,7 +62,7 @@ class UpMiddleware:
         else:
             response.delete_cookie('_up_method')
 
-        # Response headers can not be read by Unpoly.
+        # Redirect headers can not be read by Unpoly.
         # The headers are written to the url parameters and are sent back to Unpoly
         # with the redirect target response.
         for header, value in up_params:
