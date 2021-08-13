@@ -605,6 +605,16 @@ the current open modal dialog.</p>
     <span class="n">model</span> <span class="o">=</span> <span class="n">MyModel</span>
 </code></pre></div>
 </td></tr></table>
+<p>The X-Up-Target-Header can be set manually to change the HTML defined target.
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">MyUnpolyModelView</span><span class="p">(</span><span class="n">UpModelViewMixin</span><span class="p">,</span> <span class="n">UpdateView</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">xyz</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">up_target</span> <span class="o">=</span> <span class="s1">&#39;#main&#39;</span>
+</code></pre></div>
+</td></tr></table></p>
 <h4 id="html">HTML<a class="headerlink" href="#html" title="Permanent link">&para;</a></h4>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
