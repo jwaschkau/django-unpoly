@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "django-unpoly"
-version = "0.1.1"
+version = "0.1.2"
 homepage = "https://github.com/jwaschkau/django-unpoly"
 description = "Unpoly integration for Django."
 authors = ["Jannik Eilers <j.waschkau@gmail.com>"]
