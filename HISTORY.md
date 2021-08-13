@@ -1,5 +1,10 @@
 # History
 
+## 0.1.2 (2021-08-13)
+
+- Added server side support for Unpoly headers when redirecting.
+- Added X-Up-Target support for Django class-based views.
+
 ## 0.1.1 (2021-06-23)
 
 * Fixes `X-Up-Target` not considered in middleware.
