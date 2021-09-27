@@ -69,6 +69,6 @@ class UpMiddleware:
             response[header] = value
         if response.status_code >= 300 and response.status_code < 400:
             # If this is a redirect add the Unpoly headers
-            response = self._handle_redirect_headers(request, response)
+            response = self._handle_redirect_headers(response)
 
         return response
