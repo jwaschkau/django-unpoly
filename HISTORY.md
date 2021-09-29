@@ -1,9 +1,13 @@
 # History
 
+## 0.1.3 (2021-09-29)
+
+* Fixes '_handle_redirect_headers' is called with wrong parameters.
+
 ## 0.1.2 (2021-08-13)
 
-- Added server side support for Unpoly headers when redirecting.
-- Added X-Up-Target support for Django class-based views.
+* Added server side support for Unpoly headers when redirecting.
+* Added X-Up-Target support for Django class-based views.
 
 ## 0.1.1 (2021-06-23)
 

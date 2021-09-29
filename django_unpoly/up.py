@@ -9,7 +9,7 @@ from django_unpoly.exceptions import UpException
 
 class UpModelIdMixin:
     def up_id(self):
-        return f'{self.__class__.__name__}_{self.pk}'
+        return f"{self.__class__.__name__}_{self.pk}"
 
 
 class UpMixin:
@@ -19,7 +19,7 @@ class UpMixin:
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         if self.up_target:
-            response['X-Up-Target'] = str(self.up_target)
+            response["X-Up-Target"] = str(self.up_target)
         return response
 
 
