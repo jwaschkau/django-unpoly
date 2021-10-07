@@ -32,7 +32,7 @@ Unpoly 2 integration and utilities for Django
 ## Features
 
 * Implements the Unpoly 2 Server protocol (https://unpoly.com/up.protocol)
-* Provides utilities for using Unpoly 2 with Django.
+* Provides utilities for using Unpoly 2 with Django 3.
 * django-debug-toolbar support (https://github.com/jazzband/django-debug-toolbar).
 * django-concurrency support (https://github.com/saxix/django-concurrency).
 

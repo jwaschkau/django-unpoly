@@ -1,5 +1,9 @@
 # History
 
+## 0.1.4 (2021-10-07)
+
+* Allow All Django versions
+
 ## 0.1.3 (2021-09-29)
 
 * Fixes '_handle_redirect_headers' is called with wrong parameters.
