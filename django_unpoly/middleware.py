@@ -48,6 +48,7 @@ class UpMiddleware:
         up_params = self._get_up_params(request)
         # Remove Up-Parameters sent by GET so they do not show up
         request.GET = self._remove_up_params(request.GET, up_params)
+        request.is_unpoly = 'X-Up-Version' in request.headers
 
         response: HttpResponseBase = self.get_response(request)
 
