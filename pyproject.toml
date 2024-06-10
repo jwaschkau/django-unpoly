@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "django-unpoly"
-version = "0.2.0"
+version = "0.2.0.rc1"
 homepage = "https://github.com/jwaschkau/django-unpoly"
 description = "Unpoly integration for Django."
 authors = ["Jannik Eilers <j.waschkau@gmail.com>"]
@@ -35,13 +35,13 @@ pytest-cov  = { version = "^5.0", optional = true}
 tox  = { version = "^4.0", optional = true}
 virtualenv  = { version = "^20.26", optional = true}
 pip  = { version = "^24.0", optional = true}
-mkdocs  = { version = "^1.1.2", optional = true}
-mkdocs-include-markdown-plugin  = { version = "^1.0.0", optional = true}
-mkdocs-material  = { version = "^6.1.7", optional = true}
-mkdocstrings  = { version = "^0.13.6", optional = true}
+mkdocs  = { version = "^1.6.0", optional = true}
+mkdocs-include-markdown-plugin  = { version = "^6.0.0", optional = true}
+mkdocs-material  = { version = "^9.0.0", optional = true}
+mkdocstrings  = { version = "^0.25.0", optional = true}
 mkdocs-material-extensions  = { version = "^1.0.1", optional = true}
 twine  = { version = "^5.0", optional = true}
-mkdocs-autorefs = {version = "0.1", optional = true}
+mkdocs-autorefs = {version = "^1.0.1", optional = true}
 pre-commit = {version = "^2.12", optional = true}
 toml = {version = "^0.10", optional = true}
 Django = ">=3, <5"
