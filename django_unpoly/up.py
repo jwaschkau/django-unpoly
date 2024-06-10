@@ -1,6 +1,4 @@
-from typing import Optional
-
-from django.contrib.auth.mixins import LoginRequiredMixin
+import typing
 from django.http.response import HttpResponseBase
 from django.utils.translation import gettext as _
 
@@ -8,22 +6,73 @@ from django_unpoly.exceptions import UpException
 
 
 class UpModelIdMixin:
-    def up_id(self):
+    def up_id(self) -> str:
         return f"{self.__class__.__name__}_{self.pk}"
 
 
 class UpMixin:
-    def __init__(self):
-        self.up_target: Optional[str] = None  # if the up_target is set, it will be sent as X-Up-Target Request-Header
+
+    # Unpoly Server protocol
+    up_target: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Target
+    up_clear_cache: typing.Union[str, None, typing.Callable] = '*'  # https://unpoly.com/X-Up-Clear-Cache
+    up_accept_layer: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Accept-Layer
+    up_dismiss_layer: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Dismiss-Layer
+    up_events: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Events
+    up_fail_mode: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Fail-Mode
+    up_fail_target: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Fail-Target
+    up_location: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/https://unpoly.com/X-Up-Location
+    up_method: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Method
+    up_reload_from_time: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Reload-From-Time
+    up_title: typing.Union[str, None, typing.Callable] = None  # https://unpoly.com/X-Up-Title
+
+    # Unpoly template
+    layer: typing.Union[str, typing.Callable] = 'root'
+    target: typing.Union[str, None, typing.Callable] = ':none'  # :none = Do not replace anyting on site
+
+    def _get_value(self, attribute):
+        if callable(attribute):
+            return attribute()
+        else:
+            return attribute
+
+    def _get_context_list(self) -> set:
+        return {'target', 'layer', }
+
+    def get_context_data(self, *args, **kwargs):
+        for c in self._get_context_list():
+            _attr = getattr(self, c)
+            if _attr:
+                kwargs.update({c: self._get_value(_attr)})
+
+        return super().get_context_data(*args, **kwargs)
+
+    def _get_dispatch_list(self) -> dict:
+        return {
+            'up_target': 'X-Up-Target',
+            'up_clear_cache': 'X-Up-Clear-Cache',
+            'up_accept_layer': 'X-Up-Accept-Layer',
+            'up_dismiss_layer': 'X-Up-Dismiss-Layer',
+            'up_events': 'X-Up-Events',
+            'up_fail_mode': 'X-Up-Accept-Layer',
+            'up_fail_target': 'X-Up-Fail-Target',
+            'up_location': 'X-Up-Location',
+            'up_method': 'X-Up-Method',
+            'up_reload_from_time': 'X-Up-Reload-From-Time',
+            'up_title': 'X-Up-Title',
+        }
 
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
-        if self.up_target:
-            response["X-Up-Target"] = str(self.up_target)
+        for _, up_key in self._get_dispatch_list().items():
+            _attr = getattr(self, _)
+            if _attr:
+                response[up_key] = self._get_value(_attr)
         return response
 
 
 class UpFormMixin(UpMixin):
+    autosubmit: bool = False
+
     def form_invalid(self, *args, **kwargs):
         # Signaling failed form submissions
         # https://unpoly.com/up.protocol
@@ -31,6 +80,14 @@ class UpFormMixin(UpMixin):
         response.status_code = 422
         return response
 
+    def _get_context_list(self):
+        return super()._get_context_list().union({'autosubmit', })
+
+    def get_success_url(self, *args, **kwargs):
+        if 'redirect' in self.request.GET:
+            return self.request.GET.get('redirect')
+        else:
+            return super().get_success_url(*args, **kwargs)
 
 class UpDjangoConcurrencyMixin(UpMixin):
     def get(self, request, *args, **kwargs):
@@ -49,18 +106,5 @@ class UpDjangoConcurrencyMixin(UpMixin):
         return result
 
 
-class UpModelViewMixin(LoginRequiredMixin, UpFormMixin):
-    autosubmit: bool = False
-
-    def get_context_data(self, *args, **kwargs):
-        if "target" not in kwargs:
-            kwargs.update({"target": f"*[up-id='{self.object.up_id()}']"})
-        if "autosubmit" not in kwargs:
-            kwargs.update({"autosubmit": self.autosubmit})
-        return super().get_context_data(*args, **kwargs)
-
-    def get_success_url(self, *args, **kwargs):
-        try:
-            return self.request.GET.get("redirect")
-        except Exception:
-            return super().get_success_url(*args, **kwargs)
+class UpModelViewMixin(UpFormMixin):
+    target: typing.Union[str, None, typing.Callable] = lambda self: f'*[up-id=\'{self.object.unpoly_id()}\']'
