@@ -1,5 +1,9 @@
 # History
 
+## 0.2.0 (2024-06-10)
+
+* Allow All Django versions
+
 ## 0.1.4 (2021-10-07)
 
 * Allow All Django versions

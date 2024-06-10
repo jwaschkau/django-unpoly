@@ -18,19 +18,19 @@ jobs:
   # This workflow contains a single job called "build"
   release:
     name: Create Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
-        python-versions: [3.8]
+        python-versions: ['3.10']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: generate change log
-        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issues: true
@@ -42,9 +42,9 @@ jobs:
           output: CHANGELOG.md
           sinceTag: v0.1.0
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-versions }}
+          python-version: '${{ matrix.python-versions }}'
 
       - name: Install dependencies
         run: |
@@ -81,7 +81,7 @@ jobs:
           draft: false
           prerelease: false
 
-      - name:
+      - name: publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
