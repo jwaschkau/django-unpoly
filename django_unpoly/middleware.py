@@ -51,14 +51,11 @@ class UpMiddleware:
         request.is_unpoly = 'X-Up-Version' in request.headers
 
         response: HttpResponseBase = self.get_response(request)
-
         response["X-Up-Method"] = request.method
 
-        # Redirect detection for IE11
-        response["X-Up-Location"] = request.get_full_path()
-
         # Signaling the initial request method
-        if request.method == 'GET' and 'X-Up-Target' not in request:
+        # See https://unpoly.com/_up_method
+        if request.method != 'GET' and 'X-Up-Target' not in request:
             response.set_cookie('_up_method', request.method)
         else:
             response.delete_cookie('_up_method')
